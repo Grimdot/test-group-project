@@ -1,0 +1,70 @@
+.btn {
+  @include min-width($desktop) {
+    width: 148px;
+  }
+  @include max-width($desktop) {
+    width: 152px;
+  }
+  @include max-width($tablet) {
+    width: 130px;
+  }
+  height: 44px;
+  border-radius: 5px;
+}
+
+// @include min-width($desktop) {
+// }
+// @include max-width($desktop) {
+// }
+// @include max-width($tablet) {
+// }
+
+.header-btn-list {
+  @include min-width($tablet) {
+    margin-top: 52px;
+  }
+  @include max-width($tablet) {
+    margin-top: 60px;
+  }
+
+  display: flex;
+  justify-content: center;
+}
+
+.header-btn-item:not(:last-child) {
+  @include min-width($desktop) {
+    margin-right: 16px;
+  }
+  @include max-width($desktop) {
+    margin-right: 32px;
+  }
+  @include max-width($tablet) {
+    margin-right: 20px;
+  }
+}
+
+.watched-btn {
+  background-color: transparent;
+  border: 1px solid $headerColor;
+  color: $headerColor;
+  transition: color $cubic, border $cubic;
+
+  &:hover,
+  &:focus {
+    color: $accentColor;
+    border: 1px solid $accentColor;
+  }
+}
+
+.queue-btn {
+  background-color: $accentColor;
+  color: $headerColor;
+  border: none;
+  transition: color $cubic, background-color $cubic;
+
+  &:hover,
+  &:focus {
+    color: $accentColor;
+    background-color: $headerColor;
+  }
+}

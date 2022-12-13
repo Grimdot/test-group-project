@@ -1,0 +1,49 @@
+body {
+  box-sizing: border-box;
+  margin: 0;
+
+  font-family: "Roboto", sans-serif;
+
+  background-color: $backgroundMainColor;
+
+  font-weight: 500;
+
+  @include min-width($desktop) {
+    @include font(null, 20, 24);
+  }
+  @include max-width($desktop) {
+  }
+  @include max-width($tablet) {
+    @include font(null, 12, 16);
+  }
+}
+
+img {
+  display: block;
+  height: auto;
+}
+
+.container {
+  margin: 0 auto;
+
+  @include min-width($desktop) {
+    max-width: $desktop;
+  }
+  @include max-width($desktop) {
+    max-width: $tablet;
+  }
+  @include max-width($tablet) {
+    max-width: $mobile;
+  }
+}
+
+.section {
+  @include min-width($tablet) {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  @include max-width($tablet) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}

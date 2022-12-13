@@ -1,0 +1,23 @@
+@mixin font($fw, $fs, $lh) {
+  font-weight: $fw;
+  font-size: $fs * 1px;
+  line-height: calc($lh / $fs);
+}
+
+@mixin min-width($miw) {
+  @media screen and (min-width: $miw) {
+    @content;
+  }
+}
+
+@mixin max-width($maw) {
+  @media screen and (max-width: ($maw - 1px)) {
+    @content;
+  }
+}
+
+@mixin min-width-max-width($miw, $maw) {
+  @media screen and (min-width: $miw) and (max-width: ($maw - 1px)) {
+    @content;
+  }
+}

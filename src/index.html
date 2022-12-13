@@ -1,14 +1,111 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Page title</title>
+    <title>Filmoteka</title>
     <link rel="stylesheet" href="./sass/index.scss" />
-    <script type="module" src="./index.js"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+    </style>
   </head>
   <body>
-    <!-- ❗️❗️❗️ Add partials like so for every page -->
-    <include src="./partials/example.html"></include>
+    <header class="header container home-header">
+      <div class="section">
+        <div class="header-links-wrap">
+          <a href="./index.html" class="logo link">Filmoteka</a>
+          <a href="./index.html" class="phone-header-logo link"
+            ><img src="./img/film.svg" alt="Filmoteka logo"
+          /></a>
+
+          <nav class="nav-links">
+            <ul class="list nav-links-list">
+              <li class="nav-links-item">
+                <a href="./index.html" class="link nav-link current">Home</a>
+              </li>
+              <li class="nav-links-item">
+                <a href="./library.html" class="link nav-link">My Lybrary</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="search-form-wrap">
+          <form class="search-form">
+            <input
+              type="text"
+              class="search-form-input"
+              placeholder="Movie search"
+            />
+            <button type="button" class="submit-form-button">
+              <img src="./img/search.svg" alt="search icon" class="btn-icon" />
+            </button>
+          </form>
+          <p class="error-info">
+            Search result not successful. Enter the correct movie name and try
+            again please.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="container gallery-container">
+        <ul class="gallery list section">
+          <li class="gallery-item">
+            <a href="./" class="gallery-item-link link"
+              ><div class="item"></div>
+              <p class="film-name">Greyhound</p>
+              <p class="film-descr">
+                <span class="film-genres">Drama, Action</span> |
+                <span class="film-premier">2020</span>
+              </p>
+            </a>
+          </li>
+          <li class="gallery-item">
+            <a href="./" class="gallery-item-link"><div class="item"></div></a>
+          </li>
+          <li class="gallery-item">
+            <a href="./" class="gallery-item-link"><div class="item"></div></a>
+          </li>
+          <li class="gallery-item">
+            <a href="./" class="gallery-item-link"><div class="item"></div></a>
+          </li>
+          <li class="gallery-item">
+            <a href="./" class="gallery-item-link"><div class="item"></div></a>
+          </li>
+          <li class="gallery-item">
+            <a href="./" class="gallery-item-link"><div class="item"></div></a>
+          </li>
+          <li class="gallery-item">
+            <a href="./" class="gallery-item-link"><div class="item"></div></a>
+          </li>
+          <li class="gallery-item">
+            <a href="./" class="gallery-item-link"><div class="item"></div></a>
+          </li>
+          <li class="gallery-item">
+            <a href="./" class="gallery-item-link"><div class="item"></div></a>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="footer container">
+      <div class="section footer-wrap">
+        <p class="footer-info">
+          © 2020 | All Rights Reserved | Developed with<img
+            src="./img/favorite.svg"
+            alt="heart icon"
+            class="footer-logo"
+          />
+          by
+          <button class="footer-btn">GoIT Students</button>
+        </p>
+      </div>
+    </footer>
+
+    <!-- <include src="./partials/example.html"></include> -->
+    <script src="index.js" type="module"></script>
   </body>
 </html>

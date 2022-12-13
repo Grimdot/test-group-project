@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Filmoteka</title>
+    <link rel="stylesheet" href="./sass/index.scss" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+    </style>
+  </head>
+
+  <body>
+    <header class="header container lybrary-header">
+      <div class="section">
+        <div class="header-links-wrap">
+          <a href="./index.html" class="logo link">Filmoteka</a>
+          <a href="./index.html" class="phone-header-logo link"
+            ><img src="./img/film.svg" alt="Filmoteka logo"
+          /></a>
+
+          <nav class="nav-links">
+            <ul class="list nav-links-list">
+              <li class="nav-links-item">
+                <a href="./index.html" class="link nav-link">Home</a>
+              </li>
+              <li class="nav-links-item">
+                <a href="./library.html" class="link nav-link current"
+                  >My Lybrary</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <ul class="list header-btn-list">
+          <li class="header-btn-item">
+            <button type="button" class="btn watched-btn">Watched</button>
+          </li>
+          <li class="header-btn-item">
+            <button type="button" class="btn queue-btn">Queue</button>
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <footer class="footer container">
+      <div class="section footer-wrap">
+        <p class="footer-info">
+          © 2020 | All Rights Reserved | Developed with<img
+            src="./img/favorite.svg"
+            alt="heart icon"
+            class="footer-logo"
+          />
+          by
+          <button class="footer-btn">GoIT Students</button>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

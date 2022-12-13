@@ -1,0 +1,50 @@
+.gallery-container {
+  @include min-width($tablet) {
+    margin-top: 60px;
+  }
+  @include max-width($tablet) {
+    margin-top: 20px;
+  }
+}
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @include min-width($desktop) {
+    gap: 16px;
+  }
+  @include min-width-max-width($tablet, $desktop) {
+    gap: 32px;
+  }
+  @include min-width($tablet) {
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+}
+
+.gallery-item {
+  width: 100%;
+  @include min-width($desktop) {
+    flex-basis: calc((100% - 32px) / 3);
+  }
+  @include max-width($desktop) {
+    flex-basis: calc((100% - 32px) / 2);
+  }
+}
+
+.item {
+  height: 634px;
+  width: 100%;
+  background-color: cornflowerblue;
+}
+
+.film-name {
+  text-transform: uppercase;
+  color: $mainColor;
+}
+
+.film-descr {
+  color: $accentColor;
+}
