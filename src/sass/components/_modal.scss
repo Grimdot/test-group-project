@@ -21,7 +21,7 @@
     padding-top: 40px;
   }
   @include max-width($tablet) {
-    width: 280px;
+    width: 240px;
     padding-right: 20px;
     padding-left: 20px;
     padding-bottom: 40px;
@@ -111,16 +111,26 @@
 }
 
 .modal-watched-btn {
+  text-transform: uppercase;
   color: #ffffff;
   border: none;
   background-color: $accentColor;
-  margin-right: 15px;
+  @include max-width($tablet) {
+    width: 110px;
+  }
+  @include font(500, 12, 16);
 }
 
 .modal-queue-btn {
+  text-transform: uppercase;
+
   color: #000000;
   border: 1px solid #000000;
   background-color: transparent;
+  @include max-width($tablet) {
+    width: 110px;
+  }
+  @include font(500, 12, 16);
 }
 
 .modal-btns-wrap {
@@ -130,5 +140,7 @@
   }
   @include max-width($tablet) {
     margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
   }
 }
