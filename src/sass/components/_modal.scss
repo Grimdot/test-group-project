@@ -1,23 +1,48 @@
 .modal {
   position: relative;
-  display: flex;
   background-color: #fff;
-  width: 806px;
-  gap: 16px;
+
+  @include min-width($tablet) {
+    display: flex;
+    gap: 16px;
+  }
+  @include min-width($desktop) {
+    width: 806px;
+    padding: 40px 12px;
+  }
+  @include max-width($desktop) {
+    width: 704px;
+    padding-right: 72px;
+    padding-left: 36px;
+    padding-bottom: 40px;
+    padding-top: 40px;
+  }
+  @include max-width($tablet) {
+    width: 280px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: 40px;
+    padding-top: 48px;
+  }
 }
 
 .modal-poster {
-  height: 478px;
-  margin-top: 40px;
-  margin-bottom: 40px;
-  margin-left: 12px;
-
   border-radius: 5px;
+
+  @include min-width($desktop) {
+    height: 478px;
+  }
+  @include max-width($desktop) {
+    height: 370px;
+  }
+  @include max-width($tablet) {
+    height: 350px;
+    width: 100%;
+    margin-bottom: 20px;
+  }
 }
 
 .modal-description {
-  margin-top: 40px;
-  margin-bottom: 40px;
 }
 
 .film-stats {
@@ -98,6 +123,11 @@
 }
 
 .modal-btns-wrap {
-  margin-top: 20px;
-  margin-left: 24px;
+  @include min-width($tablet) {
+    margin-top: 20px;
+    margin-left: 24px;
+  }
+  @include max-width($tablet) {
+    margin-top: 20px;
+  }
 }
