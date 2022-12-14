@@ -5,6 +5,8 @@
   @include max-width($tablet) {
     margin-top: 20px;
   }
+
+  margin-bottom: 60px;
 }
 
 .gallery {
@@ -34,10 +36,17 @@
   }
 }
 
-.item {
-  height: 634px;
+.film-poster {
   width: 100%;
-  background-color: cornflowerblue;
+  @include min-width($desktop) {
+    height: 590px;
+  }
+  @include max-width($desktop) {
+    height: 455px;
+  }
+  @include max-width($tablet) {
+    height: 400px;
+  }
 }
 
 .film-name {
@@ -47,4 +56,37 @@
 
 .film-descr {
   color: $accentColor;
+}
+
+.pagination-btn-list {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  margin-top: 40px;
+  gap: 10px;
+  @include max-width($tablet) {
+    gap: 5px;
+  }
+}
+
+.current-page-btn {
+  background-color: $accentColor;
+}
+
+.pagination-dots {
+  pointer-events: none;
+
+  @include max-width($tablet) {
+    display: none;
+  }
+}
+
+.extreme-btns {
+  @include max-width($tablet) {
+    display: none;
+  }
+}
+
+.arrow-btn {
+  background-color: #f7f7f7;
 }
