@@ -330,19 +330,21 @@ const onFormSubmit = e => {
 };
 
 const onModalOpen = () => {
+  document.querySelector('body').classList.add('scroll-lock');
   document.querySelector('body').addEventListener('keydown', e => {
     if (e.key != 'Escape') {
       return;
     }
+    document.querySelector('body').removeEventListener;
     modal.close(onModalClose);
   });
   document.querySelector('.close-btn').addEventListener('click', () => {
-    modal.close();
+    modal.close(onModalClose);
   });
 };
 
 const onModalClose = () => {
-  document.querySelector('body').removeEventListener;
+  document.querySelector('body').classList.remove('scroll-lock');
 };
 
 const handleGalleryClick = e => {

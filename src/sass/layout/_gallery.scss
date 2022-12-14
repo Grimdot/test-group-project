@@ -27,6 +27,8 @@
 }
 
 .gallery-item {
+  cursor: pointer;
+
   width: 100%;
   @include min-width($desktop) {
     flex-basis: calc((100% - 32px) / 3);
