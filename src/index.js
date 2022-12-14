@@ -5,6 +5,7 @@ const filmsService = new filmService();
 const gallery = document.querySelector('.gallery');
 const pagination = document.querySelector('.pagination-btn-list');
 const form = document.querySelector('.search-form');
+const searchError = document.querySelector('.error-info');
 
 const render = films => {
   gallery.innerHTML = '';
@@ -214,7 +215,7 @@ const renderPagination = () => {
 filmsService
   .fetchTrendingFilms()
   .then(r => {
-    console.log(r.data);
+    searchError.classList.add('is-hidden');
     render(r.data.results);
     renderPagination();
   })
@@ -246,7 +247,13 @@ const onFormSubmit = e => {
   const inputValue = e.target.elements.searchQueue.value.trim();
 
   filmsService.fetchFilmByName(inputValue).then(r => {
+    if (r.data.total_results === 0) {
+      searchError.classList.remove('is-hidden');
+      return;
+    }
+    searchError.classList.add('is-hidden');
     render(r.data.results);
+    console.log(r.data);
   });
 
   form.reset();
