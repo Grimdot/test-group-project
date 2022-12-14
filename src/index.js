@@ -26,11 +26,15 @@ const modal = basicLightbox.create(
 `,
   {
     onShow: modal => {
+      document.querySelector('body').classList.add('scroll-lock');
+
       document
         .querySelector('body')
         .addEventListener('keydown', onEscModalClose);
     },
     onClose: modal => {
+      document.querySelector('body').classList.remove('scroll-lock');
+
       document
         .querySelector('body')
         .removeEventListener('keydown', onEscModalClose);
@@ -377,4 +381,3 @@ const handleGalleryClick = e => {
 gallery.addEventListener('click', handleGalleryClick);
 pagination.addEventListener('click', handleClick);
 form.addEventListener('submit', onFormSubmit);
-Footer;

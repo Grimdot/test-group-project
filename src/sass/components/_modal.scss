@@ -2,6 +2,8 @@
   position: relative;
   background-color: #fff;
 
+  overflow-y: auto;
+
   @include min-width($tablet) {
     display: flex;
     gap: 16px;
