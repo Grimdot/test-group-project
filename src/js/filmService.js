@@ -17,4 +17,10 @@ export default class filmService {
       `https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&page=${this.page}`
     );
   }
+
+  fetchFilmByName(name) {
+    return axios.get(
+      `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${name}`
+    );
+  }
 }

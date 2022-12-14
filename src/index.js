@@ -38,7 +38,6 @@ const render = films => {
     </li>`;
     });
     gallery.insertAdjacentHTML('beforeend', markup.join(''));
-    renderPagination();
   });
 };
 
@@ -217,6 +216,7 @@ filmsService
   .then(r => {
     console.log(r.data);
     render(r.data.results);
+    renderPagination();
   })
   .catch(console.log);
 
@@ -232,16 +232,24 @@ const handleClick = e => {
   filmsService
     .fetchTrendingFilms()
     .then(r => {
-      console.log(r.data);
       render(r.data.results);
+      renderPagination();
     })
     .catch(console.log);
   renderPagination();
 };
 
 const onFormSubmit = e => {
+  pagination.innerHTML = '';
   e.preventDefault();
-  console.log('submit');
+
+  const inputValue = e.target.elements.searchQueue.value.trim();
+
+  filmsService.fetchFilmByName(inputValue).then(r => {
+    render(r.data.results);
+  });
+
+  form.reset();
 };
 
 pagination.addEventListener('click', handleClick);
