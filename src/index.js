@@ -1,7 +1,9 @@
 import filmService from './js/filmService';
 import * as basicLightbox from 'basiclightbox';
+import * as basicLightbox from 'basiclightbox';
 import moment from 'moment';
 
+import 'basiclightbox/dist/basicLightbox.min.css';
 import 'basiclightbox/dist/basicLightbox.min.css';
 
 const filmsService = new filmService();
@@ -313,6 +315,8 @@ const renderModal = filmData => {
 </div>
     `;
 
+  document.querySelector('.modal').innerHTML = '';
+  document.querySelector('.modal').insertAdjacentHTML('beforeend', markup);
   document.querySelector('.modal').innerHTML = '';
   document.querySelector('.modal').insertAdjacentHTML('beforeend', markup);
 };
