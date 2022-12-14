@@ -1,6 +1,7 @@
-.modal {
+.tingle-modal-box__content {
   position: relative;
   background-color: #fff;
+  margin: 0;
 
   @include min-width($tablet) {
     display: flex;

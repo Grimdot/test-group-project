@@ -21,7 +21,8 @@
     "axios": "^1.2.1",
     "basiclightbox": "^5.0.4",
     "modern-normalize": "^1.1.0",
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "tingle.js": "^0.16.0"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.6.0",
