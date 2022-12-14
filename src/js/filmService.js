@@ -23,4 +23,10 @@ export default class filmService {
       `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${name}`
     );
   }
+
+  fetchFilmById(id) {
+    return axios.get(
+      `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`
+    );
+  }
 }

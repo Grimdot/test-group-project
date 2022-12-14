@@ -1,23 +1,56 @@
 import filmService from './js/filmService';
+import * as basicLightbox from 'basiclightbox';
 import moment from 'moment';
+
+import 'basiclightbox/dist/basiclightbox.min.css';
 
 const filmsService = new filmService();
 const gallery = document.querySelector('.gallery');
 const pagination = document.querySelector('.pagination-btn-list');
 const form = document.querySelector('.search-form');
-const searchError = document.querySelector('.error-info');
+const fetchError = document.querySelector('.error-info');
+
+filmsService
+  .fetchTrendingFilms()
+  .then(r => {
+    hideFetchError();
+    render(r.data.results);
+    renderPagination();
+  })
+  .catch(console.log);
+
+const modal = basicLightbox.create(`
+<div class = 'modal'>
+</div>
+`);
+
+const clearPagination = () => {
+  pagination.innerHTML = '';
+};
+
+const clearMarkup = () => {
+  gallery.innerHTML = '';
+};
+
+const hideFetchError = () => {
+  fetchError.classList.add('is-hidden');
+};
+
+const showFetchError = () => {
+  fetchError.classList.remove('is-hidden');
+};
 
 const render = films => {
-  gallery.innerHTML = '';
+  clearMarkup();
 
   filmsService.fetchGenres().then(r => {
     const genres = r.data.genres;
 
     const markup = films.map(film => {
-      const genresId = film.genre_ids;
+      const { genre_ids, poster_path, original_title, id } = film;
       const releaseYear = moment(film.release_date).format('YYYY');
 
-      const filmGenres = genresId.map(id => {
+      const filmGenres = genre_ids.map(id => {
         for (const genre of genres) {
           if (id === genre.id) {
             return genre.name;
@@ -25,18 +58,15 @@ const render = films => {
         }
       });
 
-      return `<li class="gallery-item">
-      <a href="./" class="gallery-item-link link">
-        <img src="https://image.tmdb.org/t/p/w300${
-          film.poster_path
-        }" alt="film poster" class='film-poster'/>
-        <p class="film-name">${film.original_title}</p>
-        <p class="film-descr">
-          <span class="film-genres">${filmGenres.join(', ')}</span> |
-          <span class="film-premier">${releaseYear}</span>
-        </p>
-      </a>
-    </li>`;
+      return `
+        <li class="gallery-item" data-id = '${id}'>
+                <img src="https://image.tmdb.org/t/p/w300${poster_path}" alt="film poster" class='film-poster'/>
+                <p class="film-name">${original_title}</p>
+                <p class="film-descr">
+                    <span class="film-genres">${filmGenres.join(', ')}</span> |
+                    <span class="film-premier">${releaseYear}</span>
+                </p>
+        </li>`;
     });
     gallery.insertAdjacentHTML('beforeend', markup.join(''));
   });
@@ -208,18 +238,58 @@ const renderPagination = () => {
     markup = paginationBtnsMarkup.join('');
   }
 
-  pagination.innerHTML = '';
+  clearPagination();
   pagination.insertAdjacentHTML('beforeend', markup);
 };
 
-filmsService
-  .fetchTrendingFilms()
-  .then(r => {
-    searchError.classList.add('is-hidden');
-    render(r.data.results);
-    renderPagination();
-  })
-  .catch(console.log);
+const renderModal = filmData => {
+  const {
+    poster_path,
+    title,
+    original_title,
+    overview,
+    vote_count,
+    vote_average,
+    popularity,
+    genres,
+  } = filmData;
+
+  const filmGenres = genres.map(genre => genre.name).join(', ');
+
+  const markup = `
+  <button type='button' class = 'close-btn'>
+</button>
+
+<img src="https://image.tmdb.org/t/p/w300${poster_path}" alt="film poster" class='modal-poster'/>
+<div class = 'modal-description'>
+<h2 class = 'modal-title'>${title}</h2>
+<div class = 'film-stats'>
+<ul class='list modal-categories'>
+    <li class = 'modal-categories-item'><p>Vote / Votes</p></li>
+    <li class = 'modal-categories-item'><p>Popularity</p></li>
+    <li class = 'modal-categories-item'><p>Original Title</p></li>
+    <li class = 'modal-categories-item'><p>Genre</p></li>
+</ul>
+<ul class='list modal-stats'>
+    <li class = 'modal-stats-item'><p><span class = 'modal-vote-average'>${vote_average}</span> / <span class = 'modal-vote-count'>${vote_count}</span></p></li>
+    <li class = 'modal-stats-item'><p>${popularity}</p></li>
+    <li class = 'modal-stats-item'><p>${original_title}</p></li>
+    <li class = 'modal-stats-item'><p>${filmGenres}</p></li>
+</ul>
+</div>
+<h3 class='about-title'>About</h3>
+<p class = 'modal-overview'>${overview}</p>
+
+<div class = 'modal-btns-wrap'>
+<button class = 'btn modal-watched-btn'>Add to watched</button>
+<button class = 'btn modal-queue-btn'>Add to queue</button>
+</div>
+</div>
+    `;
+
+  document.querySelector('.modal').innerHTML = '';
+  document.querySelector('.modal').insertAdjacentHTML('beforeend', markup);
+};
 
 const handleClick = e => {
   console.log(e.target.dataset.page);
@@ -241,17 +311,17 @@ const handleClick = e => {
 };
 
 const onFormSubmit = e => {
-  pagination.innerHTML = '';
   e.preventDefault();
+  clearPagination();
 
   const inputValue = e.target.elements.searchQueue.value.trim();
 
   filmsService.fetchFilmByName(inputValue).then(r => {
     if (r.data.total_results === 0) {
-      searchError.classList.remove('is-hidden');
+      showFetchError();
       return;
     }
-    searchError.classList.add('is-hidden');
+    hideFetchError();
     render(r.data.results);
     console.log(r.data);
   });
@@ -259,5 +329,36 @@ const onFormSubmit = e => {
   form.reset();
 };
 
+const onModalOpen = () => {
+  document.querySelector('body').addEventListener('keydown', e => {
+    if (e.key != 'Escape') {
+      return;
+    }
+    modal.close(onModalClose);
+  });
+  document.querySelector('.close-btn').addEventListener('click', () => {
+    modal.close();
+  });
+};
+
+const onModalClose = () => {
+  document.querySelector('body').removeEventListener;
+};
+
+const handleGalleryClick = e => {
+  const filmId = e.target.parentNode.dataset.id;
+
+  if (!filmId) {
+    return;
+  }
+
+  filmsService.fetchFilmById(filmId).then(r => {
+    console.log(r);
+    modal.show(onModalOpen);
+    renderModal(r.data);
+  });
+};
+
+gallery.addEventListener('click', handleGalleryClick);
 pagination.addEventListener('click', handleClick);
 form.addEventListener('submit', onFormSubmit);

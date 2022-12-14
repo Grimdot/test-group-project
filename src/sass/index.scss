@@ -1,12 +1,13 @@
-@import "utils/vars";
-@import "utils/hidden";
-@import "utils/mixins";
+@import 'utils/vars';
+@import 'utils/hidden';
+@import 'utils/mixins';
 
-@import "base/reset";
-@import "base/common";
+@import 'base/reset';
+@import 'base/common';
 
-@import "components/button";
+@import 'components/button';
+@import 'components/modal';
 
-@import "layout/header";
-@import "layout/gallery";
-@import "layout/footer";
+@import 'layout/header';
+@import 'layout/gallery';
+@import 'layout/footer';
