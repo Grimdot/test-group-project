@@ -19,10 +19,38 @@ filmsService
   })
   .catch(console.log);
 
-const modal = basicLightbox.create(`
+const modal = basicLightbox.create(
+  `
 <div class = 'modal'>
 </div>
-`);
+`,
+  {
+    onShow: modal => {
+      document
+        .querySelector('body')
+        .addEventListener('keydown', onEscModalClose);
+    },
+    onClose: modal => {
+      document
+        .querySelector('body')
+        .removeEventListener('keydown', onEscModalClose);
+      document
+        .querySelector('.close-btn')
+        .removeEventListener('click', modalClose);
+    },
+  }
+);
+
+const onEscModalClose = e => {
+  if (e.key != 'Escape') {
+    return;
+  }
+  modal.close();
+};
+
+const modalClose = () => {
+  modal.close();
+};
 
 const clearPagination = () => {
   pagination.innerHTML = '';
@@ -329,22 +357,8 @@ const onFormSubmit = e => {
   form.reset();
 };
 
-const onModalOpen = () => {
-  document.querySelector('body').classList.add('scroll-lock');
-  document.querySelector('body').addEventListener('keydown', e => {
-    if (e.key != 'Escape') {
-      return;
-    }
-    document.querySelector('body').removeEventListener;
-    modal.close(onModalClose);
-  });
-  document.querySelector('.close-btn').addEventListener('click', () => {
-    modal.close(onModalClose);
-  });
-};
-
-const onModalClose = () => {
-  document.querySelector('body').classList.remove('scroll-lock');
+const onModalShow = () => {
+  document.querySelector('.close-btn').addEventListener('click', modalClose);
 };
 
 const handleGalleryClick = e => {
@@ -356,7 +370,8 @@ const handleGalleryClick = e => {
 
   filmsService.fetchFilmById(filmId).then(r => {
     console.log(r);
-    modal.show(onModalOpen);
+
+    modal.show(onModalShow);
     renderModal(r.data);
   });
 };
