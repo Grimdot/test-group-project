@@ -1,8 +1,8 @@
 import filmService from './js/filmService';
+import * as basicLightbox from 'basiclightbox';
 import moment from 'moment';
-import tingleMin from 'tingle.js';
 
-import 'tingle.js/dist/tingle.min.css';
+import 'basiclightbox/dist/basicLightbox.min.css';
 
 const filmsService = new filmService();
 const gallery = document.querySelector('.gallery');
@@ -19,17 +19,34 @@ filmsService
   })
   .catch(console.log);
 
-const modal = new tingleMin.modal({
-  closeMethods: ['overlay', 'escape'],
-  onOpen: function () {
-    document.querySelector('.close-btn').addEventListener('click', modalClose);
-  },
-  onClose: function () {
-    document
-      .querySelector('.close-btn')
-      .removeEventListener('click', modalClose);
-  },
-});
+const modal = basicLightbox.create(
+  `
+<div class = 'modal'>
+</div>
+`,
+  {
+    onShow: modal => {
+      document
+        .querySelector('body')
+        .addEventListener('keydown', onEscModalClose);
+    },
+    onClose: modal => {
+      document
+        .querySelector('body')
+        .removeEventListener('keydown', onEscModalClose);
+      document
+        .querySelector('.close-btn')
+        .removeEventListener('click', modalClose);
+    },
+  }
+);
+
+const onEscModalClose = e => {
+  if (e.key != 'Escape') {
+    return;
+  }
+  modal.close();
+};
 
 const modalClose = () => {
   modal.close();
@@ -270,7 +287,6 @@ const renderModal = filmData => {
   const markup = `
   <button type='button' class = 'close-btn'>
 </button>
-
 <img src="https://image.tmdb.org/t/p/w300${poster_path}" alt="film poster" class='modal-poster'/>
 <div class = 'modal-description'>
 <h2 class = 'modal-title'>${title}</h2>
@@ -290,7 +306,6 @@ const renderModal = filmData => {
 </div>
 <h3 class='about-title'>About</h3>
 <p class = 'modal-overview'>${overview}</p>
-
 <div class = 'modal-btns-wrap'>
 <button class = 'btn modal-watched-btn'>Add to watched</button>
 <button class = 'btn modal-queue-btn'>Add to queue</button>
@@ -298,7 +313,8 @@ const renderModal = filmData => {
 </div>
     `;
 
-  modal.setContent(markup);
+  document.querySelector('.modal').innerHTML = '';
+  document.querySelector('.modal').insertAdjacentHTML('beforeend', markup);
 };
 
 const handleClick = e => {
@@ -339,6 +355,10 @@ const onFormSubmit = e => {
   form.reset();
 };
 
+const onModalShow = () => {
+  document.querySelector('.close-btn').addEventListener('click', modalClose);
+};
+
 const handleGalleryClick = e => {
   const filmId = e.target.parentNode.dataset.id;
 
@@ -349,11 +369,12 @@ const handleGalleryClick = e => {
   filmsService.fetchFilmById(filmId).then(r => {
     console.log(r);
 
+    modal.show(onModalShow);
     renderModal(r.data);
-    modal.open();
   });
 };
 
 gallery.addEventListener('click', handleGalleryClick);
 pagination.addEventListener('click', handleClick);
 form.addEventListener('submit', onFormSubmit);
+Footer;
