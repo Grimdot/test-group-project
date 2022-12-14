@@ -2,7 +2,7 @@ import filmService from './js/filmService';
 import * as basicLightbox from 'basiclightbox';
 import moment from 'moment';
 
-import 'basiclightbox/dist/basiclightbox.min.css';
+import 'basiclightbox/dist/basicLightbox.min.css';
 
 const filmsService = new filmService();
 const gallery = document.querySelector('.gallery');
