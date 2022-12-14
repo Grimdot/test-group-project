@@ -4,6 +4,7 @@ import moment from 'moment';
 const filmsService = new filmService();
 const gallery = document.querySelector('.gallery');
 const pagination = document.querySelector('.pagination-btn-list');
+const form = document.querySelector('.search-form');
 
 const render = films => {
   gallery.innerHTML = '';
@@ -16,7 +17,7 @@ const render = films => {
       const releaseYear = moment(film.release_date).format('YYYY');
 
       const filmGenres = genresId.map(id => {
-        for (genre of genres) {
+        for (const genre of genres) {
           if (id === genre.id) {
             return genre.name;
           }
@@ -238,4 +239,10 @@ const handleClick = e => {
   renderPagination();
 };
 
+const onFormSubmit = e => {
+  e.preventDefault();
+  console.log('submit');
+};
+
 pagination.addEventListener('click', handleClick);
+form.addEventListener('submit', onFormSubmit);
