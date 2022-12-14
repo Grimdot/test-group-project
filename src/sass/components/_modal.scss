@@ -1,8 +1,15 @@
+.modal-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .modal {
   position: relative;
   background-color: #fff;
 
   overflow-y: auto;
+  max-height: 100%;
   height: 80vh;
 
   @include min-width($tablet) {

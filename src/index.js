@@ -21,7 +21,9 @@ filmsService
 
 const modal = basicLightbox.create(
   `
+<div class = 'modal-wrap'>
 <div class = 'modal'>
+</div>
 </div>
 `,
   {
