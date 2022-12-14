@@ -289,8 +289,7 @@ const renderModal = filmData => {
   const filmGenres = genres.map(genre => genre.name).join(', ');
 
   const markup = `
-  <button type='button' class = 'close-btn'>
-</button>
+  <button type='button' class = 'close-btn'></button>
 <img src="https://image.tmdb.org/t/p/w300${poster_path}" alt="film poster" class='modal-poster'/>
 <div class = 'modal-description'>
 <h2 class = 'modal-title'>${title}</h2>
@@ -359,7 +358,7 @@ const onFormSubmit = e => {
   form.reset();
 };
 
-const onModalShow = () => {
+const afterModalShow = () => {
   document.querySelector('.close-btn').addEventListener('click', modalClose);
 };
 
@@ -373,7 +372,7 @@ const handleGalleryClick = e => {
   filmsService.fetchFilmById(filmId).then(r => {
     console.log(r);
 
-    modal.show(onModalShow);
+    modal.show(afterModalShow);
     renderModal(r.data);
   });
 };

@@ -3,6 +3,7 @@
   background-color: #fff;
 
   overflow-y: auto;
+  height: 80vh;
 
   @include min-width($tablet) {
     display: flex;
