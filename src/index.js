@@ -1,12 +1,13 @@
 import filmService from './js/filmService';
 import * as basicLightbox from 'basiclightbox';
 import moment from 'moment';
+import Pagination from 'tui-pagination';
 
 import 'basiclightbox/dist/basicLightbox.min.css';
 
 const filmsService = new filmService();
 const gallery = document.querySelector('.gallery');
-const pagination = document.querySelector('.pagination-btn-list');
+const paginationContainer = document.querySelector('.pagination');
 const form = document.querySelector('.search-form');
 const fetchError = document.querySelector('.error-info');
 
@@ -15,9 +16,31 @@ filmsService
   .then(r => {
     hideFetchError();
     render(r.data.results);
-    renderPagination();
   })
   .catch(console.log);
+
+const pagination = new Pagination(paginationContainer, {
+  totalItems: 20,
+  itemsPerPage: 1,
+  visiblePages: 5,
+  template: {
+    page: '<a href="#" class="pagination-btn">{{page}}</a>',
+    currentPage:
+      '<strong class="pagination-btn current-page-btn">{{page}}</strong>',
+    moveButton:
+      '<a href="#" class="move-btns pagination-btn tui-{{type}}">' +
+      '<span class="btn-{{type}}">{{type}}</span>' +
+      '</a>',
+    disabledMoveButton:
+      '<span class=" tui-is-disabled tui-{{type}}">' +
+      '<span class="btn-{{type}}">{{type}}</span>' +
+      '</span>',
+    moreButton:
+      '<a href="#" class=" tui-{{type}}-is-ellip">' +
+      '<span class="pagination-btn btn-ellip">...</span>' +
+      '</a>',
+  },
+});
 
 const modal = basicLightbox.create(
   `
@@ -56,10 +79,6 @@ const onEscModalClose = e => {
 
 const modalClose = () => {
   modal.close();
-};
-
-const clearPagination = () => {
-  pagination.innerHTML = '';
 };
 
 const clearMarkup = () => {
@@ -104,176 +123,6 @@ const render = films => {
     });
     gallery.insertAdjacentHTML('beforeend', markup.join(''));
   });
-};
-
-const renderPagination = () => {
-  let currentPage = Number(filmsService.page);
-  let markup = '';
-
-  if (currentPage === 1) {
-    const paginationBtnsMarkup = Array(5)
-      .fill()
-      .map((_, idx) => {
-        return idx + currentPage === currentPage
-          ? `<li><button data-page="${
-              idx + currentPage
-            }" class='pagination-btn current-page-btn'>${
-              idx + currentPage
-            }</button></li>`
-          : `<li><button data-page="${
-              idx + currentPage
-            }" class='pagination-btn'>${idx + currentPage}</button></li>`;
-      });
-
-    paginationBtnsMarkup.push(`
-      <p class= 'pagination-dots'>...</p>
-      <li><button data-page="20" class ='pagination-btn extreme-btns'>20</button></li>
-    <li><button data-page="${
-      currentPage + 1
-    }" class ='pagination-btn arrow-btn'>></button></li>
-      `);
-
-    markup = paginationBtnsMarkup.join('');
-  }
-
-  if (currentPage > 1 && currentPage <= 4) {
-    const paginationBtnsMarkup = Array(5)
-      .fill()
-      .map((_, idx) => {
-        return idx + 1 === currentPage
-          ? `<li><button data-page="${
-              idx + 1
-            }" class='pagination-btn current-page-btn'>${idx + 1}</button></li>`
-          : `<li><button data-page="${idx + 1}" class='pagination-btn'>${
-              idx + 1
-            }</button></li>`;
-      });
-
-    paginationBtnsMarkup.unshift(
-      `<li><button data-page="${
-        currentPage - 1
-      }" class ='pagination-btn arrow-btn'><</button></li>`
-    );
-    paginationBtnsMarkup.push(`
-      <p class= 'pagination-dots'>...</p>
-      <li><button data-page="20" class ='pagination-btn extreme-btns'>20</button></li>
-    <li><button data-page="${
-      currentPage + 1
-    }" class ='pagination-btn arrow-btn'>></button></li>
-      `);
-
-    markup = paginationBtnsMarkup.join('');
-  }
-
-  if (currentPage >= 5 && currentPage <= 15) {
-    markup = `
-    <li>
-        <button data-page="${
-          currentPage - 1
-        }" class ='pagination-btn arrow-btn'><</button>
-    </li>
-    <li>
-        <button data-page="1" class ='pagination-btn extreme-btns'>1</button>
-    </li>
-    <p class= 'pagination-dots'>...</p>
-    <li>
-        <button data-page="${currentPage - 2}" class ='pagination-btn'>${
-      currentPage - 2
-    }</button>
-    </li>
-    <li>
-        <button data-page="${currentPage - 1}" class ='pagination-btn'>${
-      currentPage - 1
-    }</button>
-    </li>
-    <li>
-        <button data-page="${currentPage}" class ='pagination-btn current-page-btn'>${currentPage}</button>
-    </li>
-    <li>
-        <button data-page="${currentPage + 1}" class ='pagination-btn'>${
-      currentPage + 1
-    }</button>
-    </li>
-    <li>
-        <button data-page="${currentPage + 2}" class ='pagination-btn'>${
-      currentPage + 2
-    }</button>
-    </li>
-        <p class= 'pagination-dots'>...</p>
-    <li>
-        <button data-page="20" class ='pagination-btn extreme-btns'>20</button>
-    </li>
-    <li>
-        <button data-page="${
-          currentPage + 1
-        }" class ='pagination-btn arrow-btn'>></button>
-    </li>
-        `;
-  }
-
-  if (currentPage >= 16 && currentPage < 20) {
-    const paginationBtnsMarkup = Array(5)
-      .fill()
-      .map((_, idx) => {
-        return idx + 16 === currentPage
-          ? `<li><button data-page="${
-              idx + 16
-            }" class='pagination-btn current-page-btn'>${
-              idx + 16
-            }</button></li>`
-          : `<li><button data-page="${idx + 16}" class='pagination-btn'>${
-              idx + 16
-            }</button></li>`;
-      });
-
-    paginationBtnsMarkup.unshift(
-      `<li><button data-page="${
-        currentPage - 1
-      }" class ='pagination-btn arrow-btn'><</button></li>
-        <li>
-        <button data-page="1" class ='pagination-btn extreme-btns'>1</button>
-        </li>
-        <p class= 'pagination-dots'>...</p>`
-    );
-    paginationBtnsMarkup.push(`
-    <li><button data-page="${
-      currentPage + 1
-    }" class ='pagination-btn arrow-btn'>></button></li>
-      `);
-
-    markup = paginationBtnsMarkup.join('');
-  }
-
-  if (currentPage === 20) {
-    const paginationBtnsMarkup = Array(6)
-      .fill()
-      .map((_, idx) => {
-        return idx + 15 === currentPage
-          ? `<li><button data-page="${
-              idx + 15
-            }" class='pagination-btn current-page-btn'>${
-              idx + 15
-            }</button></li>`
-          : `<li><button data-page="${idx + 15}" class='pagination-btn'>${
-              idx + 15
-            }</button></li>`;
-      });
-
-    paginationBtnsMarkup.unshift(
-      `<li><button data-page="${
-        currentPage - 1
-      }" class ='pagination-btn arrow-btn'><</button></li>
-        <li>
-        <button data-page="1" class ='pagination-btn extreme-btns'>1</button>
-        </li>
-        <p class= 'pagination-dots'>...</p>`
-    );
-
-    markup = paginationBtnsMarkup.join('');
-  }
-
-  clearPagination();
-  pagination.insertAdjacentHTML('beforeend', markup);
 };
 
 const renderModal = filmData => {
@@ -343,9 +192,14 @@ const handleClick = e => {
 
 const onFormSubmit = e => {
   e.preventDefault();
-  clearPagination();
 
   const inputValue = e.target.elements.searchQueue.value.trim();
+
+  if (!inputValue) {
+    return;
+  }
+
+  paginationContainer.innerHTML = '';
 
   filmsService.fetchFilmByName(inputValue).then(r => {
     if (r.data.total_results === 0) {
@@ -353,6 +207,7 @@ const onFormSubmit = e => {
       return;
     }
     hideFetchError();
+
     render(r.data.results);
     console.log(r.data);
   });
@@ -380,5 +235,11 @@ const handleGalleryClick = e => {
 };
 
 gallery.addEventListener('click', handleGalleryClick);
-pagination.addEventListener('click', handleClick);
 form.addEventListener('submit', onFormSubmit);
+pagination.on('beforeMove', evt => {
+  console.log(evt.page);
+  filmsService.page = evt.page;
+  filmsService.fetchTrendingFilms().then(r => {
+    render(r.data.results);
+  });
+});

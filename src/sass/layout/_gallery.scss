@@ -23,6 +23,10 @@
   @include min-width($tablet) {
     flex-wrap: wrap;
     flex-direction: row;
+    margin-bottom: 60px;
+  }
+  @include max-width($tablet) {
+    margin-bottom: 40px;
   }
 }
 
@@ -58,37 +62,4 @@
 
 .film-descr {
   color: $accentColor;
-}
-
-.pagination-btn-list {
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
-  margin-top: 40px;
-  gap: 10px;
-  @include max-width($tablet) {
-    gap: 5px;
-  }
-}
-
-.current-page-btn {
-  background-color: $accentColor;
-}
-
-.pagination-dots {
-  pointer-events: none;
-
-  @include max-width($tablet) {
-    display: none;
-  }
-}
-
-.extreme-btns {
-  @include max-width($tablet) {
-    display: none;
-  }
-}
-
-.arrow-btn {
-  background-color: #f7f7f7;
 }

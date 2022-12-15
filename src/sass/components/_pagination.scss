@@ -1,0 +1,120 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include min-width($tablet) {
+    gap: 15px;
+  }
+}
+
+.pagination-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color, $cubic, background-color, $cubic;
+
+  &:hover {
+    background-color: orange;
+    color: white;
+    border-radius: 4px;
+  }
+}
+
+.current-page-btn {
+  background-color: orange;
+  color: white;
+  border-radius: 4px;
+}
+
+.move-btns,
+.tui-is-disabled {
+  position: relative;
+  background-color: #f7f7f7;
+  border-radius: 4px;
+  font-size: 0;
+  width: 40px;
+  height: 40px;
+}
+
+.tui-is-disabled {
+  color: #bdbdbd;
+}
+
+.tui-next {
+  &::after {
+    content: '›';
+    position: absolute;
+    font-size: 30px;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-18%, -68%);
+
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.tui-last {
+  @include max-width($tablet) {
+    display: none;
+  }
+
+  &::after {
+    content: '»';
+    position: absolute;
+    font-size: 30px;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-27%, -68%);
+
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.tui-prev {
+  &::after {
+    content: '‹';
+    position: absolute;
+    font-size: 30px;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-18%, -68%);
+
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.tui-first {
+  @include max-width($tablet) {
+    display: none;
+  }
+  ::after {
+    content: '«';
+    position: absolute;
+    font-size: 30px;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-27%, -68%);
+
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.btn-ellip {
+  @include max-width($tablet) {
+    display: none;
+  }
+}
