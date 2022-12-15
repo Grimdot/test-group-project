@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Filmoteka</title>
     <link rel="stylesheet" href="./sass/index.scss" />
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
@@ -44,6 +47,14 @@
       </div>
     </header>
 
+    <main>
+      <section class="container gallery-container">
+        <ul class="gallery list section"></ul>
+
+        <div class="pagination"></div>
+      </section>
+    </main>
+
     <footer class="footer container">
       <div class="section footer-wrap">
         <p class="footer-info">
@@ -57,5 +68,7 @@
         </p>
       </div>
     </footer>
+
+    <script src="./js/library.js" type="module"></script>
   </body>
 </html>

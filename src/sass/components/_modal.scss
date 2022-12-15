@@ -1,12 +1,6 @@
-.modal-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .modal {
-  position: relative;
   background-color: #fff;
+  position: relative;
 
   overflow-y: auto;
   max-height: 100%;
