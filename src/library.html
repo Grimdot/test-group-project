@@ -38,10 +38,18 @@
         </div>
         <ul class="list header-btn-list">
           <li class="header-btn-item">
-            <button type="button" class="btn watched-btn">Watched</button>
+            <button
+              type="button"
+              class="btn watched-btn"
+              data-type="watchedBtn"
+            >
+              Watched
+            </button>
           </li>
           <li class="header-btn-item">
-            <button type="button" class="btn queue-btn">Queue</button>
+            <button type="button" class="btn queue-btn" data-type="queueBtn">
+              Queue
+            </button>
           </li>
         </ul>
       </div>
@@ -50,8 +58,6 @@
     <main>
       <section class="container gallery-container">
         <ul class="gallery list section"></ul>
-
-        <div class="pagination"></div>
       </section>
     </main>
 

@@ -5,7 +5,7 @@ import { refs } from './refs';
 
 const filmService = new moviesAPI();
 
-export const render = films => {
+export const homeRender = films => {
   filmService.fetchGenres().then(r => {
     const genres = r.data.genres;
 
@@ -34,4 +34,26 @@ export const render = films => {
     refs.gallery.innerHTML = '';
     refs.gallery.insertAdjacentHTML('beforeend', markup.join(''));
   });
+};
+
+export const lybraryRender = film => {
+  const markup = film.map(item => {
+    const { genres, id, poster_path, original_title } = item.data;
+    const releaseYear = moment(item.data.release_date).format('YYYY');
+
+    const filmGenres = genres.map(genre => genre.name);
+
+    return `
+        <li class="gallery-item" data-id = '${id}'>
+                <img src="https://image.tmdb.org/t/p/w300${poster_path}" alt="film poster" class='film-poster'/>
+                <p class="film-name">${original_title}</p>
+                <p class="film-descr">
+                    <span class="film-genres">${filmGenres.join(', ')}</span> |
+                    <span class="film-premier">${releaseYear}</span>
+                </p>
+        </li>`;
+  });
+
+  refs.gallery.innerHTML = '';
+  refs.gallery.insertAdjacentHTML('beforeend', markup.join(''));
 };

@@ -14,7 +14,7 @@ export default class moviesAPI {
 
   fetchTrendingFilms() {
     return axios.get(
-      `https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&page=${this.page}`
+      `https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&page=${this.page}&append_to_response=genres`
     );
   }
 

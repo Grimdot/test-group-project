@@ -1,6 +1,8 @@
 import { refs } from './refs';
 import moviesAPI from './moviesAPI';
 import * as basicLightbox from 'basiclightbox';
+import Notiflix from 'notiflix';
+
 import 'basiclightbox/dist/basicLightbox.min.css';
 
 const filmService = new moviesAPI();
@@ -108,17 +110,12 @@ const onModalBtnsClick = e => {
       localStorage.setItem('queue-list', JSON.stringify(stored));
     } else {
       if (inWebStorage.includes(e.target.dataset.id)) {
-        console.log('It is already in your storage!!!');
+        Notiflix.Notify.info("You've already added this movie to your queue!");
         return;
       }
       inWebStorage.push(e.target.dataset.id);
       localStorage.setItem('queue-list', JSON.stringify(inWebStorage));
     }
-
-    // const queue = [];
-    // queue.push(e.target.dataset.id);
-
-    // localStorage.setItem('queue-list', JSON.stringify(queue));
   }
   if (e.target.dataset.type === 'Watched') {
     const stored = [];
@@ -129,7 +126,9 @@ const onModalBtnsClick = e => {
       localStorage.setItem('watched-list', JSON.stringify(stored));
     } else {
       if (inWebStorage.includes(e.target.dataset.id)) {
-        console.log('It is already in your storage!!!');
+        Notiflix.Notify.info(
+          "You've already added this movie to your watched!"
+        );
         return;
       }
       inWebStorage.push(e.target.dataset.id);

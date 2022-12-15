@@ -1,35 +1,70 @@
 import { refs } from './refs';
 import { spinnerStart, spinnerStop } from './spinner';
+import { lybraryRender } from './render';
+import { modal, renderModal, afterModalShow } from './modal';
+
 import moviesAPI from './moviesAPI';
-import moment from 'moment';
 
 const filmService = new moviesAPI();
 
-const ids = JSON.parse(localStorage.getItem('queue-list'));
+const emptyStorageMarkup = `<p class = 'storage-error'>This storage is empty... Yet :)</p>`;
 
-const makeRender = array => {
-  const markup = array.map(item => {
-    const { id, poster_path, original_title } = item.data;
-
-    const releaseYear = moment(item.data.release_date).format('YYYY');
-
-    return `
-        <li class="gallery-item" data-id = '${id}'>
-                <img src="https://image.tmdb.org/t/p/w300${poster_path}" alt="film poster" class='film-poster'/>
-                <p class="film-name">${original_title}</p>
-                <p class="film-descr">
-                    <span class="film-genres"></span> |
-                    <span class="film-premier">${releaseYear}</span>
-                </p>
-        </li>`;
-  });
-
-  console.log(markup.join(''));
-
-  refs.gallery.insertAdjacentHTML('beforeend', markup.join(''));
+const onHeaderBtnsClick = e => {
+  if (!e.target.dataset) {
+    return;
+  }
+  if (e.target.dataset.type === 'watchedBtn') {
+    watchedFetch();
+  }
+  if (e.target.dataset.type === 'queueBtn') {
+    queueFetch();
+  }
 };
 
-Promise.all(filmService.fetcByMultipleIds(ids)).then(r => {
-  console.log(r);
-  makeRender(r);
-});
+const handleGalleryClick = e => {
+  const filmId = e.target.parentNode.dataset.id;
+
+  if (!filmId) {
+    return;
+  }
+
+  filmService.fetchFilmById(filmId).then(r => {
+    modal.show(afterModalShow);
+    renderModal(r.data);
+  });
+};
+
+const watchedFetch = () => {
+  spinnerStart();
+  const ids = JSON.parse(localStorage.getItem('watched-list'));
+  if (!ids) {
+    refs.gallery.insertAdjacentHTML('afterbegin', emptyStorageMarkup);
+    spinnerStop();
+    return;
+  }
+
+  Promise.all(filmService.fetcByMultipleIds(ids)).then(r => {
+    lybraryRender(r);
+    spinnerStop();
+  });
+};
+
+const queueFetch = () => {
+  spinnerStart();
+  const ids = JSON.parse(localStorage.getItem('queue-list'));
+  if (!ids) {
+    refs.gallery.insertAdjacentHTML('afterbegin', emptyStorageMarkup);
+    spinnerStop();
+    return;
+  }
+
+  Promise.all(filmService.fetcByMultipleIds(ids)).then(r => {
+    lybraryRender(r);
+    spinnerStop();
+  });
+};
+
+queueFetch();
+
+refs.gallery.addEventListener('click', handleGalleryClick);
+refs.headerBtns.addEventListener('click', onHeaderBtnsClick);

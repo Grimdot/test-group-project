@@ -1,5 +1,4 @@
 import { refs } from './refs';
-import { render } from './render';
 import moviesAPI from './moviesAPI';
 
 import Pagination from 'tui-pagination';
@@ -7,7 +6,7 @@ import { spinnerStart, spinnerStop } from './spinner';
 
 const filmService = new moviesAPI();
 
-export const makePagination = pages => {
+export const makePagination = (pages, callback) => {
   const pagination = new Pagination(refs.paginationContainer, {
     totalItems: pages,
     itemsPerPage: 1,
@@ -35,8 +34,10 @@ export const makePagination = pages => {
     spinnerStart();
     filmService.page = evt.page;
     filmService.fetchTrendingFilms().then(r => {
-      render(r.data.results);
+      callback(r.data.results);
       spinnerStop();
+
+      window.scrollTo(0, 0);
     });
   });
 };

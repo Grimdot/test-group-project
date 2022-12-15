@@ -1,6 +1,6 @@
 import moviesAPI from './js/moviesAPI';
 
-import { render } from './js/render';
+import { homeRender } from './js/render';
 import { refs } from './js/refs';
 import { makePagination } from './js/pagination';
 import { modal, renderModal, afterModalShow } from './js/modal';
@@ -54,8 +54,8 @@ const firstFetch = () => {
     .then(r => {
       console.log(r);
       spinnerStop();
-      render(r.data.results);
-      makePagination(r.data.total_pages);
+      homeRender(r.data.results);
+      makePagination(r.data.total_pages, homeRender);
     })
     .catch(console.log);
 };
