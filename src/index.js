@@ -4,6 +4,7 @@ import { render } from './js/render';
 import { refs } from './js/refs';
 import { makePagination } from './js/pagination';
 import { modal, renderModal, afterModalShow } from './js/modal';
+import { spinnerStart, spinnerStop } from './js/spinner';
 
 const filmService = new moviesAPI();
 
@@ -46,14 +47,17 @@ const handleGalleryClick = e => {
 };
 
 const firstFetch = () => {
+  spinnerStart();
+
   filmService
     .fetchTrendingFilms()
     .then(r => {
+      console.log(r);
+      spinnerStop();
       render(r.data.results);
+      makePagination(r.data.total_pages);
     })
     .catch(console.log);
-
-  makePagination();
 };
 
 firstFetch();

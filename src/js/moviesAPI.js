@@ -29,4 +29,12 @@ export default class moviesAPI {
       `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&append_to_response=videos`
     );
   }
+
+  fetcByMultipleIds(array) {
+    return array.map(id => {
+      return axios.get(
+        `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&append_to_response=videos`
+      );
+    });
+  }
 }

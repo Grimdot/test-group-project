@@ -3,12 +3,13 @@ import { render } from './render';
 import moviesAPI from './moviesAPI';
 
 import Pagination from 'tui-pagination';
+import { spinnerStart, spinnerStop } from './spinner';
 
 const filmService = new moviesAPI();
 
-export const makePagination = () => {
+export const makePagination = pages => {
   const pagination = new Pagination(refs.paginationContainer, {
-    totalItems: 20,
+    totalItems: pages,
     itemsPerPage: 1,
     visiblePages: 5,
     template: {
@@ -31,9 +32,11 @@ export const makePagination = () => {
   });
 
   pagination.on('beforeMove', evt => {
+    spinnerStart();
     filmService.page = evt.page;
     filmService.fetchTrendingFilms().then(r => {
       render(r.data.results);
+      spinnerStop();
     });
   });
 };

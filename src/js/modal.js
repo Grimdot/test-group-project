@@ -5,30 +5,33 @@ import 'basiclightbox/dist/basicLightbox.min.css';
 
 const filmService = new moviesAPI();
 
+const modalOptions = {
+  onShow: modal => {
+    refs.body.classList.add('scroll-lock');
+
+    refs.body.addEventListener('keydown', onEscModalClose);
+  },
+  onClose: modal => {
+    refs.body.classList.remove('scroll-lock');
+
+    refs.body.removeEventListener('keydown', onEscModalClose);
+
+    document
+      .querySelector('.modal-btns-wrap')
+      .removeEventListener('click', onModalBtnsClick);
+
+    document
+      .querySelector('.close-btn')
+      .removeEventListener('click', modalClose);
+  },
+};
+
 export const modal = basicLightbox.create(
   `
 <div class = 'modal'>
 </div>
 `,
-  {
-    onShow: modal => {
-      refs.body.classList.add('scroll-lock');
-
-      document
-        .querySelector('body')
-        .addEventListener('keydown', onEscModalClose);
-    },
-    onClose: modal => {
-      refs.body.classList.remove('scroll-lock');
-
-      document
-        .querySelector('body')
-        .removeEventListener('keydown', onEscModalClose);
-      document
-        .querySelector('.close-btn')
-        .removeEventListener('click', modalClose);
-    },
-  }
+  modalOptions
 );
 
 const onEscModalClose = e => {
@@ -49,11 +52,12 @@ export const renderModal = filmData => {
     popularity,
     genres,
     videos,
+    id,
   } = filmData;
 
   const filmGenres = genres.map(genre => genre.name).join(', ');
 
-  const trailerLink = videos.results.filter(video => video.type === 'Trailer');
+  // const trailerLink = videos.results.filter(video => video.type === 'Trailer');
 
   const markup = `
   <button type='button' class = 'close-btn'></button>
@@ -77,8 +81,8 @@ export const renderModal = filmData => {
 <h3 class='about-title'>About</h3>
 <p class = 'modal-overview'>${overview}</p>
 <div class = 'modal-btns-wrap'>
-<button class = 'btn modal-watched-btn'>Add to watched</button>
-<button class = 'btn modal-queue-btn'>Add to queue</button>
+<button class = 'btn modal-watched-btn' data-id='${id}' data-type='Watched'>Add to watched</button>
+<button class = 'btn modal-queue-btn' data-id='${id}' data-type='Queue'>Add to queue</button>
 </div>
 
 </div>`;
@@ -91,6 +95,53 @@ const modalClose = () => {
   modal.close();
 };
 
+const onModalBtnsClick = e => {
+  if (!e.target.dataset.type) {
+    return;
+  }
+  if (e.target.dataset.type === 'Queue') {
+    const stored = [];
+    const inWebStorage = JSON.parse(localStorage.getItem('queue-list'));
+
+    if (!inWebStorage) {
+      stored.push(e.target.dataset.id);
+      localStorage.setItem('queue-list', JSON.stringify(stored));
+    } else {
+      if (inWebStorage.includes(e.target.dataset.id)) {
+        console.log('It is already in your storage!!!');
+        return;
+      }
+      inWebStorage.push(e.target.dataset.id);
+      localStorage.setItem('queue-list', JSON.stringify(inWebStorage));
+    }
+
+    // const queue = [];
+    // queue.push(e.target.dataset.id);
+
+    // localStorage.setItem('queue-list', JSON.stringify(queue));
+  }
+  if (e.target.dataset.type === 'Watched') {
+    const stored = [];
+    const inWebStorage = JSON.parse(localStorage.getItem('watched-list'));
+
+    if (!inWebStorage) {
+      stored.push(e.target.dataset.id);
+      localStorage.setItem('watched-list', JSON.stringify(stored));
+    } else {
+      if (inWebStorage.includes(e.target.dataset.id)) {
+        console.log('It is already in your storage!!!');
+        return;
+      }
+      inWebStorage.push(e.target.dataset.id);
+      localStorage.setItem('watched-list', JSON.stringify(inWebStorage));
+    }
+  }
+};
+
 export const afterModalShow = () => {
   document.querySelector('.close-btn').addEventListener('click', modalClose);
+
+  document
+    .querySelector('.modal-btns-wrap')
+    .addEventListener('click', onModalBtnsClick);
 };
