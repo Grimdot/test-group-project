@@ -6,7 +6,14 @@ import { makePagination, paginationContainer } from './js/pagination';
 import { modal, renderModal, afterModalShow } from './js/modal';
 import { spinnerStart, spinnerStop } from './js/spinner';
 
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { authentificate, logOut } from './js/firebase';
+import Notiflix from 'notiflix';
+
+
 const filmService = new moviesAPI();
+
+let uid = null
 
 const onFormSubmit = e => {
   e.preventDefault();
@@ -21,10 +28,8 @@ const onFormSubmit = e => {
 
   filmService.fetchFilmByName(inputValue).then(r => {
     if (r.data.total_results === 0) {
-      // showFetchError();
       return;
     }
-    // hideFetchError();
 
     homeRender(r.data.results);
     console.log(r.data);
@@ -64,3 +69,20 @@ firstFetch();
 
 refs.gallery.addEventListener('click', handleGalleryClick);
 refs.form.addEventListener('submit', onFormSubmit);
+
+refs.googleIn.addEventListener('click', authentificate);
+refs.googleOut.addEventListener('click', logOut);
+
+const auth = getAuth();
+
+onAuthStateChanged(auth, user => {
+  if (user) {
+    uid = user.uid
+    console.log(user);
+    Notiflix.Notify.success(`Hi, ${user.displayName}`)
+  } else {
+    console.log('im not here');
+    Notiflix.Notify.info(`Bye`)
+  }
+});
+
