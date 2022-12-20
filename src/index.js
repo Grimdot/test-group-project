@@ -2,7 +2,7 @@ import moviesAPI from './js/moviesAPI';
 
 import { homeRender } from './js/render';
 import { refs } from './js/refs';
-import { makePagination } from './js/pagination';
+import { makePagination, paginationContainer } from './js/pagination';
 import { modal, renderModal, afterModalShow } from './js/modal';
 import { spinnerStart, spinnerStop } from './js/spinner';
 
@@ -17,20 +17,20 @@ const onFormSubmit = e => {
     return;
   }
 
-  paginationContainer.innerHTML = '';
+  refs.paginationContainer.innerHTML = '';
 
   filmService.fetchFilmByName(inputValue).then(r => {
     if (r.data.total_results === 0) {
-      showFetchError();
+      // showFetchError();
       return;
     }
-    hideFetchError();
+    // hideFetchError();
 
-    render(r.data.results);
+    homeRender(r.data.results);
     console.log(r.data);
   });
 
-  form.reset();
+  refs.form.reset();
 };
 
 const handleGalleryClick = e => {
