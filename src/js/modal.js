@@ -2,7 +2,7 @@ import { refs } from './refs';
 import moviesAPI from './moviesAPI';
 import * as basicLightbox from 'basiclightbox';
 
-import { manageUserData, getUserData} from './firebase';
+import { manageUserData } from './firebase';
 
 import 'basiclightbox/dist/basicLightbox.min.css';
 import { get } from 'firebase/database';
@@ -104,11 +104,10 @@ const onModalBtnsClick = e => {
     return;
   }
   if (e.target.dataset.type === 'Queue') {
-
-    manageUserData(e.target.dataset.id, 'Queue')
+    manageUserData(e.target.dataset.id, 'Queue');
   }
   if (e.target.dataset.type === 'Watched') {
-    manageUserData(e.target.dataset.id, 'Watched')
+    manageUserData(e.target.dataset.id, 'Watched');
   }
 };
 
@@ -119,4 +118,3 @@ export const afterModalShow = () => {
     .querySelector('.modal-btns-wrap')
     .addEventListener('click', onModalBtnsClick);
 };
-

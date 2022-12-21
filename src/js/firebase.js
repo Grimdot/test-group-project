@@ -28,128 +28,156 @@ const provider = new GoogleAuthProvider();
 
 const auth = getAuth();
 
-export function getCurrentUser(auth) {
+function getCurrentUser() {
   return new Promise((resolve, reject) => {
-     const unsubscribe = auth.onAuthStateChanged(user => {
-        unsubscribe();
-        resolve(user);
-     }, reject);
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      unsubscribe();
+      resolve(user);
+    }, reject);
   });
 }
 
-export const authentificate = async() => {
+// Залогінитись
+
+export const authentificate = async () => {
   try {
     await signInWithPopup(auth, provider);
-    Notiflix.Notify.success('You succesfully logged in')
+    Notiflix.Notify.success('You succesfully logged in');
   } catch (error) {
-    console.log(error)
-    Notiflix.Notify.failure('Something went wrong')
+    console.log(error);
+    Notiflix.Notify.failure('Something went wrong');
   }
 };
 
-const updateUserData = async(id, type, userId)  => {
-  
-const db = getDatabase();
-
-  try {
-    await update(ref(db, 'users/' + userId), {
-    [type]: [id],
-  });
-  Notiflix.Notify.info (`Film has been added to your ${type} list`)
-  } catch (error) {
-    console.log(error)
-    Notiflix.Notify.failure('Something went wrong')
-  }
-
-}
-
-const toggleUserData = async(id, arr, type, userId) => {
-let idsArr = []
-idsArr = arr[type]
-
-if(idsArr.includes(id)){
-  const filteredIds = idsArr.filter(filmId => filmId != id)
+const updateUserData = async (id, type, userId) => {
   const db = getDatabase();
 
   try {
     await update(ref(db, 'users/' + userId), {
-      [type]: filteredIds,
+      [type]: [id],
     });
-    Notiflix.Notify.failure(`Film has been removed from your ${type} list`)
-  
+    Notiflix.Notify.info(`Film has been added to your ${type} list`);
   } catch (error) {
-    console.log(error)
-    Notiflix.Notify.failure('Something went wrong')
+    console.log(error);
+    Notiflix.Notify.failure('Something went wrong');
   }
- }else{
+};
 
-  idsArr.push(id)
+const toggleUserData = async (id, arr, type, userId) => {
+  let idsArr = [];
+  idsArr = arr[type];
 
-  const db = getDatabase();
-  await update(ref(db, 'users/' + userId), {
-    [type]: idsArr,
-  });
-  Notiflix.Notify.info (`Film has been added to your ${type} list`)
-
-}
-}
-
-const createUserData = async(id, type, userId) => {
+  if (idsArr.includes(id)) {
+    const filteredIds = idsArr.filter(filmId => filmId != id);
     const db = getDatabase();
-    
-try {
-  await set(ref(db, 'users/' + userId), {
-    [type]: [id],
-  });
-  Notiflix.Notify.info (`Film has been added to your ${type} list`)
-} catch (error) {
-  console.log(error)
-  Notiflix.Notify.failure('Something went wrong')
-}
 
-}
+    try {
+      await update(ref(db, 'users/' + userId), {
+        [type]: filteredIds,
+      });
+      Notiflix.Notify.failure(`Film has been removed from your ${type} list`);
+    } catch (error) {
+      console.log(error);
+      Notiflix.Notify.failure('Something went wrong');
+    }
+  } else {
+    idsArr.push(id);
+
+    const db = getDatabase();
+    await update(ref(db, 'users/' + userId), {
+      [type]: idsArr,
+    });
+    Notiflix.Notify.info(`Film has been added to your ${type} list`);
+  }
+};
+
+const createUserData = async (id, type, userId) => {
+  const db = getDatabase();
+
+  try {
+    await set(ref(db, 'users/' + userId), {
+      [type]: [id],
+    });
+    Notiflix.Notify.info(`Film has been added to your ${type} list`);
+  } catch (error) {
+    console.log(error);
+    Notiflix.Notify.failure('Something went wrong');
+  }
+};
+
+// Обробляє айді та тип (watched/queue), куди треба їх записати
+// Якщо такого типу немає - створює новий
+// Якщо викликати на тому айді, який вже є в БД - видаляє його звідти
+// Якщо в БД взагалі немає запису - створює новий
 
 export const manageUserData = (id, type) => {
-  getCurrentUser(auth).then(r => {
-    const uid = r.uid
+  getCurrentUser().then(r => {
+    const uid = r.uid;
 
     const dbRef = ref(getDatabase());
-    get(child(dbRef, `users/${uid}`)).then((snapshot) => {      
-  if (snapshot.exists() && !snapshot.val()[type]) {
-    updateUserData(id, type, uid)
-  }
-  if(snapshot.exists() && snapshot.val()[type]){
-    toggleUserData(id, snapshot.val(), type, uid)
-  }
-  if(!snapshot.exists()) {
-    createUserData(id, type, uid)
-  }
-}).catch((error) => {
-  console.error(error);
-});
-})
-}
-
-
-export const logOut = async () => {
- await signOut(auth);
- Notiflix.Notify.info("You've been signed out")
+    get(child(dbRef, `users/${uid}`))
+      .then(snapshot => {
+        if (snapshot.exists() && !snapshot.val()[type]) {
+          updateUserData(id, type, uid);
+        }
+        if (snapshot.exists() && snapshot.val()[type]) {
+          toggleUserData(id, snapshot.val(), type, uid);
+        }
+        if (!snapshot.exists()) {
+          createUserData(id, type, uid);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  });
 };
 
+// Розлогінитись
 
-const getUserData = () => {
-  const dbRef = ref(getDatabase());
-get(child(dbRef, `users/${userId}`)).then((snapshot) => {
-  if (snapshot.exists()) {
-    console.log(snapshot.val());
-  } else {
-    console.log("No data available");
-  }
-}).catch((error) => {
-  console.error(error);
-});
-}
+export const logOut = async () => {
+  await signOut(auth);
+  Notiflix.Notify.info("You've been signed out");
+};
 
+// Отримати проміс з айдішніками з бекенду
+// Якщо айдішніків немає - прилітає null
+// Якщо айдішніки є - прилітають в вигляді обʼєкту
+// {
+//   watched: [someId]
+//   queue: [someId]
+// }
+
+export const getUserData = async () => {
+  return getCurrentUser().then(async r => {
+    const uid = r.uid;
+
+    const dbRef = ref(getDatabase());
+    try {
+      const snapshot = await get(child(dbRef, `users/${uid}`));
+      if (snapshot.val() === null) {
+        Notiflix.Notify.failure('Your storage is empty');
+        return null;
+      } else {
+        return snapshot.val();
+      }
+    } catch (error) {
+      console.log(error);
+      Notiflix.Notify.failure('Something went wrong');
+    }
+  });
+};
+
+// Перевіряє чи зареєстрований користувач, чисто візуально виводить
+// інформацію через Notiflix
+
+export const greet = () => {
+  getCurrentUser(auth).then(r => {
+    if (r === null) {
+      Notiflix.Notify.info('Please sign in');
+    } else Notiflix.Notify.success(`Hi ${r.displayName}`);
+  });
+};
 
 refs.googleIn.addEventListener('click', authentificate);
 refs.googleOut.addEventListener('click', logOut);

@@ -4,7 +4,7 @@ import { lybraryRender } from './render';
 import { modal, renderModal, afterModalShow } from './modal';
 import Notiflix from 'notiflix';
 
-import { authentificate, getUserData, logOut, getCurrentUser} from './firebase';
+import { authentificate, getUserData, greet, logOut } from './firebase';
 import { getAuth } from 'firebase/auth';
 
 import moviesAPI from './moviesAPI';
@@ -12,7 +12,7 @@ import moviesAPI from './moviesAPI';
 const filmService = new moviesAPI();
 
 const emptyStorageMarkup = `<p class = 'storage-error'>This storage is empty... Yet :)</p>`;
-let uid = null
+let uid = null;
 
 const onHeaderBtnsClick = e => {
   if (!e.target.dataset) {
@@ -55,7 +55,9 @@ const watchedFetch = () => {
 };
 
 const queueFetch = () => {
-  getUserData()
+  getUserData().then(r => {
+    console.log(r);
+  });
   spinnerStart();
   const ids = JSON.parse(localStorage.getItem('queue-list'));
   if (!ids) {
@@ -77,13 +79,4 @@ refs.headerBtns.addEventListener('click', onHeaderBtnsClick);
 refs.googleIn.addEventListener('click', authentificate);
 refs.googleOut.addEventListener('click', logOut);
 
-const auth = getAuth();
-
-getCurrentUser(auth).then(r => {console.log(r)
-if(r === null) {
-  Notiflix.Notify.info('Please sign in')
-}
-else (  Notiflix.Notify.success(`Hi ${r.displayName}`)
-)
-});
-
+greet();
