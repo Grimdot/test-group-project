@@ -2,9 +2,10 @@ import { refs } from './refs';
 import moviesAPI from './moviesAPI';
 import * as basicLightbox from 'basiclightbox';
 
-import { addUserData} from './firebase';
+import { manageUserData, getUserData} from './firebase';
 
 import 'basiclightbox/dist/basicLightbox.min.css';
+import { get } from 'firebase/database';
 
 const filmService = new moviesAPI();
 
@@ -84,8 +85,8 @@ export const renderModal = filmData => {
 <h3 class='about-title'>About</h3>
 <p class = 'modal-overview'>${overview}</p>
 <div class = 'modal-btns-wrap'>
-<button class = 'btn modal-watched-btn' data-id='${id}' data-type='Watched'>Add to watched</button>
-<button class = 'btn modal-queue-btn' data-id='${id}' data-type='Queue'>Add to queue</button>
+<button class = 'btn modal-watched-btn' data-id='${id}' data-type='Watched'>Add to watched ${id}</button>
+<button class = 'btn modal-queue-btn' data-id='${id}' data-type='Queue'>Add to queue ${id}</button>
 </div>
 
 </div>`;
@@ -104,10 +105,10 @@ const onModalBtnsClick = e => {
   }
   if (e.target.dataset.type === 'Queue') {
 
-    addUserData(e.target.dataset.id)
+    manageUserData(e.target.dataset.id, 'Queue')
   }
   if (e.target.dataset.type === 'Watched') {
-   
+    manageUserData(e.target.dataset.id, 'Watched')
   }
 };
 
@@ -118,3 +119,4 @@ export const afterModalShow = () => {
     .querySelector('.modal-btns-wrap')
     .addEventListener('click', onModalBtnsClick);
 };
+

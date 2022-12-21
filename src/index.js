@@ -2,18 +2,16 @@ import moviesAPI from './js/moviesAPI';
 
 import { homeRender } from './js/render';
 import { refs } from './js/refs';
-import { makePagination, paginationContainer } from './js/pagination';
+import { makePagination } from './js/pagination';
 import { modal, renderModal, afterModalShow } from './js/modal';
 import { spinnerStart, spinnerStop } from './js/spinner';
 
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { authentificate, logOut } from './js/firebase';
+import { getUserData, getCurrentUser } from './js/firebase'
+import { getAuth } from 'firebase/auth';
 import Notiflix from 'notiflix';
 
-
 const filmService = new moviesAPI();
-
-let uid = null
 
 const onFormSubmit = e => {
   e.preventDefault();
@@ -75,14 +73,12 @@ refs.googleOut.addEventListener('click', logOut);
 
 const auth = getAuth();
 
-onAuthStateChanged(auth, user => {
-  if (user) {
-    uid = user.uid
-    console.log(user);
-    Notiflix.Notify.success(`Hi, ${user.displayName}`)
-  } else {
-    console.log('im not here');
-    Notiflix.Notify.info(`Bye`)
-  }
+getCurrentUser(auth).then(r => {console.log(r)
+if(r === null) {
+  Notiflix.Notify.info('Please sign in')
+}
+else (  Notiflix.Notify.success(`Hi ${r.displayName}`)
+)
 });
+
 

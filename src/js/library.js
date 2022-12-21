@@ -4,8 +4,8 @@ import { lybraryRender } from './render';
 import { modal, renderModal, afterModalShow } from './modal';
 import Notiflix from 'notiflix';
 
-import { authentificate, logOut} from './firebase';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { authentificate, getUserData, logOut, getCurrentUser} from './firebase';
+import { getAuth } from 'firebase/auth';
 
 import moviesAPI from './moviesAPI';
 
@@ -55,6 +55,7 @@ const watchedFetch = () => {
 };
 
 const queueFetch = () => {
+  getUserData()
   spinnerStart();
   const ids = JSON.parse(localStorage.getItem('queue-list'));
   if (!ids) {
@@ -78,14 +79,11 @@ refs.googleOut.addEventListener('click', logOut);
 
 const auth = getAuth();
 
-onAuthStateChanged(auth, user => {
-  if (user) {
-    console.log('Im here', user);
-    Notiflix.Notify.success(`Hi, ${user.displayName}`)
-  } else {
-    console.log('im not here');
-    Notiflix.Notify.info(`Bye`)
-  }
+getCurrentUser(auth).then(r => {console.log(r)
+if(r === null) {
+  Notiflix.Notify.info('Please sign in')
+}
+else (  Notiflix.Notify.success(`Hi ${r.displayName}`)
+)
 });
-
 
