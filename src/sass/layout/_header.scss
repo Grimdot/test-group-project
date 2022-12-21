@@ -205,3 +205,15 @@
     margin-top: 16px;
   }
 }
+
+.auth-btn {
+  color: white;
+  background-color: transparent;
+  border: none;
+  &:hover {
+    color: red;
+  }
+  &:active {
+    color: orange;
+  }
+}

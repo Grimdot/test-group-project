@@ -10,6 +10,10 @@
   }
   height: 44px;
   border-radius: 5px;
+
+  &:disabled {
+    background-color: grey;
+  }
 }
 
 // @include min-width($desktop) {

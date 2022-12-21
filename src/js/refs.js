@@ -6,7 +6,5 @@ export const refs = {
   fetchError: document.querySelector('.error-info'),
   headerBtns: document.querySelector('.header-btn-list'),
   clearBtnWrap: document.querySelector('.clear-btn-wrap'),
-  
-  googleIn: document.querySelector('.google-in'),
-  googleOut: document.querySelector('.google-out'),
+  authBtnWrap: document.querySelector('.auth-link-wrap'),
 };

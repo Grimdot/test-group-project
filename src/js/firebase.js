@@ -10,6 +10,8 @@ import {
 } from 'firebase/auth';
 import { getDatabase, ref, set, get, child, update } from 'firebase/database';
 import Notiflix from 'notiflix';
+import { renderBtn } from './render';
+import { listeners } from 'process';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBakZQ7NSRmE_SAmTsvnOPb_I7LECSfEIo',
@@ -28,7 +30,7 @@ const provider = new GoogleAuthProvider();
 
 const auth = getAuth();
 
-function getCurrentUser() {
+export function getCurrentUser() {
   return new Promise((resolve, reject) => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       unsubscribe();
@@ -36,18 +38,6 @@ function getCurrentUser() {
     }, reject);
   });
 }
-
-// Залогінитись
-
-export const authentificate = async () => {
-  try {
-    await signInWithPopup(auth, provider);
-    Notiflix.Notify.success('You succesfully logged in');
-  } catch (error) {
-    console.log(error);
-    Notiflix.Notify.failure('Something went wrong');
-  }
-};
 
 const updateUserData = async (id, type, userId) => {
   const db = getDatabase();
@@ -105,6 +95,26 @@ const createUserData = async (id, type, userId) => {
   }
 };
 
+// Розлогінитись
+
+export const logOut = async () => {
+  await signOut(auth);
+  Notiflix.Notify.info("You've been signed out");
+};
+
+// Залогінитись
+
+export const authentificate = async () => {
+  try {
+    await signInWithPopup(auth, provider);
+    renderBtn(true);
+    Notiflix.Notify.success('You succesfully logged in');
+  } catch (error) {
+    console.log(error);
+    Notiflix.Notify.failure('Something went wrong');
+  }
+};
+
 // Обробляє айді та тип (watched/queue), куди треба їх записати
 // Якщо такого типу немає - створює новий
 // Якщо викликати на тому айді, який вже є в БД - видаляє його звідти
@@ -133,13 +143,6 @@ export const manageUserData = (id, type) => {
   });
 };
 
-// Розлогінитись
-
-export const logOut = async () => {
-  await signOut(auth);
-  Notiflix.Notify.info("You've been signed out");
-};
-
 // Отримати проміс з айдішніками з бекенду
 // Якщо айдішніків немає - прилітає null
 // Якщо айдішніки є - прилітають в вигляді обʼєкту
@@ -150,6 +153,11 @@ export const logOut = async () => {
 
 export const getUserData = async () => {
   return getCurrentUser().then(async r => {
+    if (!r) {
+      Notiflix.Notify.info('Log in first');
+      return;
+    }
+
     const uid = r.uid;
 
     const dbRef = ref(getDatabase());
@@ -168,8 +176,7 @@ export const getUserData = async () => {
   });
 };
 
-// Перевіряє чи зареєстрований користувач, чисто візуально виводить
-// інформацію через Notiflix
+// Перевіряє чи зареєстрований користувач, привітання через повідомлення
 
 export const greet = () => {
   getCurrentUser(auth).then(r => {
@@ -179,5 +186,19 @@ export const greet = () => {
   });
 };
 
-refs.googleIn.addEventListener('click', authentificate);
-refs.googleOut.addEventListener('click', logOut);
+const handleAuthClick = e => {
+  if (e.target.dataset.type === 'sign-in') {
+    authentificate();
+  }
+  if (e.target.dataset.type === 'log-out') {
+    logOut();
+    renderBtn(false);
+  }
+};
+
+export const MakeAuthBtn = () => {
+  getCurrentUser(auth).then(r => {
+    renderBtn(r);
+    refs.authBtnWrap.addEventListener('click', handleAuthClick);
+  });
+};

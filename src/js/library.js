@@ -4,7 +4,7 @@ import { lybraryRender } from './render';
 import { modal, renderModal, afterModalShow } from './modal';
 import Notiflix from 'notiflix';
 
-import { authentificate, getUserData, greet, logOut } from './firebase';
+import { getUserData, greet, MakeAuthBtn } from './firebase';
 import { getAuth } from 'firebase/auth';
 
 import moviesAPI from './moviesAPI';
@@ -76,7 +76,7 @@ queueFetch();
 
 refs.gallery.addEventListener('click', handleGalleryClick);
 refs.headerBtns.addEventListener('click', onHeaderBtnsClick);
-refs.googleIn.addEventListener('click', authentificate);
-refs.googleOut.addEventListener('click', logOut);
 
 greet();
+
+MakeAuthBtn();

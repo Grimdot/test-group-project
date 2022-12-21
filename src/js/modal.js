@@ -55,7 +55,6 @@ export const renderModal = filmData => {
     vote_average,
     popularity,
     genres,
-    videos,
     id,
   } = filmData;
 

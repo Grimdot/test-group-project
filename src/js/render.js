@@ -2,6 +2,8 @@ import moviesAPI from './moviesAPI';
 import moment from 'moment';
 
 import { refs } from './refs';
+import { getCurrentUser } from './firebase';
+import { ref } from 'firebase/database';
 
 const filmService = new moviesAPI();
 
@@ -56,4 +58,21 @@ export const lybraryRender = film => {
 
   refs.gallery.innerHTML = '';
   refs.gallery.insertAdjacentHTML('beforeend', markup.join(''));
+};
+
+export const renderBtn = authState => {
+  let markup = '';
+  if (!authState) {
+    markup = `            
+          <button class="auth-btn" data-type = 'sign-in' type="button">
+            Sign in
+          </button>`;
+  } else {
+    markup = `            
+          <button class="auth-btn"  data-type = 'log-out' type="button">
+            Log out
+          </button>`;
+  }
+  refs.authBtnWrap.innerHTML = '';
+  refs.authBtnWrap.insertAdjacentHTML('beforeend', markup);
 };
